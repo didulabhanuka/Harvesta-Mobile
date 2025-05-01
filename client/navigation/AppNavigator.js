@@ -8,7 +8,10 @@ import HomeScreen from '../screens/HomeScreen';
 import FertilizationScreen from '../screens/FertilizationScreen';
 import DiseaseDetectionScreen from '../screens/DiseaseDetectionScreen';
 import PestManagementScreen from '../screens/PestManagementScreen';
-import HarvestScreen from '../screens/HarvestScreen';
+
+import HarvestScreen from '../screens/harvest/HarvestScreen';
+import UploadHarvestImageScreen from '../screens/harvest/UploadHarvestImageScreen';
+import HistoricalDataScreen from '../screens/harvest/HistoricalDataScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,10 +52,23 @@ function PestManagementStackScreen() {
 }
 
 // Harvest Stack 
-function HarvestStackScreen() {
+function HarvestStackScreen({ navigation }) {
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const state = navigation.getState();
+      if (state?.routes?.length > 1) {
+        navigation.popToTop();
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HarvestMain" component={HarvestScreen} />
+      <Stack.Screen name="UploadHarvestImage" component={UploadHarvestImageScreen} />
+      <Stack.Screen name="HarvestHistory" component={HistoricalDataScreen} />
     </Stack.Navigator>
   );
 }
