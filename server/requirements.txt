@@ -1,0 +1,14 @@
+flask
+torch
+torchvision
+numpy
+pillow
+ultralytics
+Flask-Cors
+opencv-python
+pandas
+tensorflow
+openpyxl
+scikit-learn
+firebase_admin
+timm
