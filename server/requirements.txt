@@ -4,11 +4,14 @@ torchvision
 numpy
 pillow
 ultralytics
-Flask-Cors
+flask-cors
 opencv-python
 pandas
 tensorflow
 openpyxl
 scikit-learn
-firebase_admin
+firebase-admin
 timm
+lightgbm
+pyyaml
+catboost
