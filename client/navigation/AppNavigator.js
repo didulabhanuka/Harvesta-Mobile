@@ -13,6 +13,11 @@ import HarvestScreen from '../screens/harvest/HarvestScreen';
 import UploadHarvestImageScreen from '../screens/harvest/UploadHarvestImageScreen';
 import HistoricalDataScreen from '../screens/harvest/HistoricalDataScreen';
 
+import FertilizerDetailsScreen from '../screens/fertilizer/FertilizerDetailsScreen';
+import FertilizerHistoryScreen from '../screens/fertilizer/FertilizerHistoryScreen';
+import IrrigationDetailsScreen from '../screens/fertilizer/IrrigationDetailsScreen';
+import IrrigationHistoryScreen from '../screens/fertilizer/IrrigationHistoryScreen';
+
 const Stack = createNativeStackNavigator();
 
 // Home Stack
@@ -29,6 +34,11 @@ function FertilizationStackScreen() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="FertilizationMain" component={FertilizationScreen} />
+      <Stack.Screen name="FertilizerDetailsScreen" component={FertilizerDetailsScreen} />
+      <Stack.Screen name="FertilizerHistoryScreen" component={FertilizerHistoryScreen} />
+      <Stack.Screen name="IrrigationDetailsScreen" component={IrrigationDetailsScreen} />
+      <Stack.Screen name="IrrigationHistoryScreen" component={IrrigationHistoryScreen} />
+      
     </Stack.Navigator>
   );
 }

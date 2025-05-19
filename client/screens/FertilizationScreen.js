@@ -1,12 +1,29 @@
-// /screens/FertilizationScreen.js
-
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export default function FertilizationScreen() {
+export default function FertilizationScreen({ navigation }) {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Fertilization / Irrigation Screen</Text>
+      <Text style={styles.title}>Fertilization / Irrigation</Text>
+
+      {/* Fertilizer Button */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('FertilizerDetailsScreen')}
+      >
+        <Icon name="seed" size={24} color="#fff" style={styles.buttonIcon} />
+        <Text style={styles.buttonText}>Fertilizer</Text>
+      </TouchableOpacity>
+
+      {/* Irrigation Button */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('IrrigationDetailsScreen')}
+      >
+        <Icon name="sprinkler" size={24} color="#fff" style={styles.buttonIcon} />
+        <Text style={styles.buttonText}>Irrigation</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -16,10 +33,37 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: '#e0f7fa',
   },
-  text: {
-    fontSize: 24,
+  title: {
+    fontSize: 32,
     fontWeight: 'bold',
+    marginBottom: 40,
+    color: '#00796b',
+    fontFamily: 'Poppins',
     textAlign: 'center',
+  },
+  button: {
+    flexDirection: 'row',
+    backgroundColor: '#40B59F',
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    marginTop: 20,
+    width: '80%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 5, // Adding shadow for a floating effect
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+    marginLeft: 10,
+    fontFamily: 'Poppins',
+  },
+  buttonIcon: {
+    marginRight: 10,
   },
 });

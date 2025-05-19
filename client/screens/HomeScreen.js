@@ -12,7 +12,7 @@ const { width: screenWidth } = Dimensions.get('window');
 const features = [
   {
     id: '1',
-    title: 'Fertilization',
+    title: 'Fertilization & Irrigation',
     icon: <Ionicons name="water-outline" size={30} color="#40B59F" />,
     navigateTo: 'Fertilization',
   },
