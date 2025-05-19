@@ -32,8 +32,15 @@ export default function HistoricalDataScreen() {
   };
 
   const extractData = (key) => {
-    return historicalData.map((entry) => entry[key] ?? 0);
+    return historicalData.map((entry) => {
+      const value = entry[key];
+      if (!isFinite(value)) {
+        return 0; // fallback or you can use null
+      }
+      return value ?? 0;
+    });
   };
+
 
   const extractDates = () => {
     return historicalData.map((entry) => {

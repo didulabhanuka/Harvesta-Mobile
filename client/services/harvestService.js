@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 // IMPORTANT: Update your base URL when moving to production server
-const BASE_URL = "http://192.168.8.104:5000/harvesta-api/harvestingpredict";
+const BASE_URL = "http://172.20.10.3:5000/harvesta-api/harvestingpredict";
 
 export const uploadImages = async (images) => {
   const formData = new FormData();

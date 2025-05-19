@@ -12,3 +12,6 @@ openpyxl
 scikit-learn
 firebase_admin
 timm
+catboost
+lightgbm
+xgboost
