@@ -172,7 +172,7 @@ export default IrrigationHistoryScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e0f2f1',
+    backgroundColor: '#ffffff',
   },
   scrollContent: {
     padding: 16,

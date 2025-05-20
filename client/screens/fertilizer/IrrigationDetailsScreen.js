@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LineChart } from 'react-native-chart-kit';
-import axios from 'axios';
-import { useNavigation } from '@react-navigation/native'; // Import useNavigation
+import { useNavigation } from '@react-navigation/native';
+import { fetchIrrigationValue } from '../../services/fertilizerServices';  // Import your service
 
 const IrrigationDetailsScreen = () => {
   const [plantAge, setPlantAge] = useState('');
@@ -23,7 +23,7 @@ const IrrigationDetailsScreen = () => {
   const [alertMessage, setAlertMessage] = useState('');
 
   const screenWidth = Dimensions.get('window').width;
-  const navigation = useNavigation(); // Initialize useNavigation
+  const navigation = useNavigation();
 
   const handleCalculate = async () => {
     if (!plantAge || !soilMoisture) {
@@ -38,25 +38,12 @@ const IrrigationDetailsScreen = () => {
       return;
     }
 
-    try {
-      const response = await axios.post(
-        'http://192.168.1.48:5000/harvesta-api/fertilizermanagement/irrigation',
-        {
-          PlantAge: parseFloat(plantAge),
-          SoilMoisture: parseFloat(soilMoisture),
-        }
-      );
-
-      const value = response.data?.value?.IrrigationValue;
-      if (value !== undefined) {
-        setIrrigationValue(value);
-        setChartData((prev) => [...prev, value]);
-      } else {
-        setAlertMessage('Invalid response from server.');
-        setShowInputAlert(true);
-      }
-    } catch (error) {
-      setAlertMessage('Network error. Please try again.');
+    const value = await fetchIrrigationValue(plantAge, soilMoisture);
+    if (value !== null) {
+      setIrrigationValue(value);
+      setChartData((prev) => [...prev, value]);
+    } else {
+      setAlertMessage('Could not fetch irrigation value. Please try again.');
       setShowInputAlert(true);
     }
   };
@@ -75,7 +62,7 @@ const IrrigationDetailsScreen = () => {
       {/* History Button */}
       <TouchableOpacity
         style={styles.historyButton}
-        onPress={() => navigation.navigate('IrrigationHistoryScreen')} // Navigate to the history screen
+        onPress={() => navigation.navigate('IrrigationHistoryScreen')}
       >
         <Text style={styles.historyButtonText}>History</Text>
       </TouchableOpacity>
@@ -173,7 +160,7 @@ export default IrrigationDetailsScreen;
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#e0f2f1',
+    backgroundColor: '#ffffff',
     flexGrow: 1,
   },
   header: {
@@ -271,32 +258,34 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   alertBox: {
-    backgroundColor: '#ffffff',
-    padding: 24,
-    borderRadius: 12,
+    backgroundColor: 'white',
+    padding: 20,
     width: '80%',
+    borderRadius: 12,
+    elevation: 10,
     alignItems: 'center',
   },
   alertTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 12,
     color: '#d32f2f',
   },
   alertMessage: {
     fontSize: 16,
+    marginBottom: 20,
     textAlign: 'center',
-    color: '#555',
+    color: '#333',
   },
   alertButton: {
-    marginTop: 16,
     backgroundColor: '#40b59f',
-    paddingVertical: 10,
-    paddingHorizontal: 24,
     borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
   },
   alertButtonText: {
     color: 'white',
     fontSize: 16,
+    fontWeight: 'bold',
   },
 });
