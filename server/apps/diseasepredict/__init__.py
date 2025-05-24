@@ -1,7 +1,6 @@
 from flask import Blueprint
 
-blueprint = Blueprint(
-    'diseasepredict_blueprint',
-    __name__,
-    url_prefix='/harvesta-api/diseasepredict'
-)
+# Create the blueprint for disease prediction
+blueprint = Blueprint('diseasepredict_blueprint', __name__, url_prefix='/harvesta-api/diseasepredict')
+
+# Register the blueprint with your Flask app in your main file

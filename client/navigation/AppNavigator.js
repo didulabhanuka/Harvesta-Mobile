@@ -6,7 +6,17 @@ import WelcomeScreen from '../components/WelcomeScreen';
 
 import HomeScreen from '../screens/HomeScreen';
 import FertilizationScreen from '../screens/FertilizationScreen';
-import DiseaseDetectionScreen from '../screens/DiseaseDetectionScreen';
+
+// import DiseaseDetectionScreen from '../screens/DiseaseDetectionScreen';
+import ImageUploadScreen from '../screens/disease/DiseaseImageUpload';
+import MainDiseaseDetectionScreen from '../screens/disease/MainDiseaseDetectionScreen';
+import DiseaseInfoScreen from '../screens/disease/DiseaseInfoScreen';
+import DiseaseHistoryScreen from '../screens/disease/DiseaseHistoryScreen';
+import HistoryDetailScreen from '../screens/disease/HistoryDetailScreen';
+import ActionScheduleScreen from '../screens/disease/ActionScheduleScreen';
+import ReminderSettingsScreen from '../screens/disease/ReminderSettingsScreen';
+
+
 import PestManagementScreen from '../screens/PestManagementScreen';
 
 import HarvestScreen from '../screens/harvest/HarvestScreen';
@@ -44,13 +54,33 @@ function FertilizationStackScreen() {
 }
 
 // Disease Detection Stack
-function DiseaseDetectionStackScreen() {
+function DiseaseDetectionStackScreen({ navigation }) {
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      const state = navigation.getState();
+      if (state?.routes?.length > 1) {
+        navigation.popToTop();
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="DiseaseDetectionMain" component={DiseaseDetectionScreen} />
+      {/* <Stack.Screen name="DiseaseDetectionMain" component={DiseaseDetectionScreen} /> */}
+      <Stack.Screen name="DiseaseDetectionScreen" component={MainDiseaseDetectionScreen} />
+      <Stack.Screen name="ImageUploadScreen" component={ImageUploadScreen} />
+      <Stack.Screen name="DiseaseInfo" component={DiseaseInfoScreen} />
+      <Stack.Screen name="DiseaseHistoryScreen" component={DiseaseHistoryScreen} />
+      <Stack.Screen name="HistoryDetail" component={HistoryDetailScreen} />
+        <Stack.Screen name="ActionSchedule" component={ActionScheduleScreen}/>
+    <Stack.Screen name="ReminderSettings" component={ReminderSettingsScreen}/>
     </Stack.Navigator>
   );
 }
+
 
 // Pest Management Stack
 function PestManagementStackScreen() {
@@ -70,10 +100,12 @@ function HarvestStackScreen({ navigation }) {
         navigation.popToTop();
       }
     });
+    
 
     return unsubscribe;
   }, [navigation]);
 
+  
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="HarvestMain" component={HarvestScreen} />
@@ -81,6 +113,8 @@ function HarvestStackScreen({ navigation }) {
       <Stack.Screen name="HarvestHistory" component={HistoricalDataScreen} />
     </Stack.Navigator>
   );
+
+  
 }
 
 
@@ -101,6 +135,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Home">
         {() => <TabNavigator screens={screens} />}
       </Stack.Screen>
+      
     </Stack.Navigator>
   );
 }
