@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Define the API endpoint (replace with your actual base URL)
-const BASE_URL = 'http://192.168.8.100:5000/harvesta-api/diseasepredict/predict'; // Replace with your backend URL
+const BASE_URL = 'http://172.20.10.3:5000/harvesta-api/diseasepredict/predict'; // Replace with your backend URL
 
 // Function to upload the image and fetch disease info from the backend
 export const fetchDiseaseInfo = async (imageUri) => {
