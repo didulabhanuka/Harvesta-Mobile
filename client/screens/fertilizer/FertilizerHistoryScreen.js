@@ -53,14 +53,14 @@ const FertilizerHistoryScreen = () => {
         const barLabels = sortedAges.map(age => `${age}`);
         const barAveragedValues = sortedAges.map(
           age => groupedFertilizer[age].total / groupedFertilizer[age].count
-        );  
+        );
 
         setBarChartData({
           labels: barLabels,
           datasets: [
             {
               data: barAveragedValues.map(val => Number(val.toFixed(2))),
-              color: (opacity = 1) => `rgba(0, 150, 136, ${opacity})`,
+              color: () => `rgba(0, 150, 136, 1)`,
             },
           ],
           legend: ['Avg Fertilizer Value (mg)'],
@@ -76,7 +76,7 @@ const FertilizerHistoryScreen = () => {
           datasets: [
             {
               data: sqiAveragedValues.map(val => Number(val.toFixed(2))),
-              color: (opacity = 1) => `rgba(0, 150, 136, ${opacity})`,
+              color: () => `rgba(0, 150, 136, 1)`,
               strokeWidth: 2,
             },
           ],
@@ -105,24 +105,32 @@ const FertilizerHistoryScreen = () => {
               <Text style={styles.yAxisLabel}>Fertilizer (mg)</Text>
             </View>
             <View>
+              <View style={styles.chartLegend}>
+                <Text style={styles.legendText}>Avg Fertilizer Value (mg)</Text>
+              </View>
               <BarChart
                 data={barChartData}
                 width={screenWidth - 100}
                 height={300}
                 yAxisSuffix="mg"
-                chartConfig={{
-                  backgroundColor: '#e0f2f1',
-                  backgroundGradientFrom: '#b2dfdb',
-                  backgroundGradientTo: '#80cbc4',
-                  decimalPlaces: 2,
-                  color: (opacity = 1) => `rgba(0, 77, 64, ${opacity})`,
-                  labelColor: (opacity = 1) => `rgba(0, 77, 64, ${opacity})`,
-                  barPercentage: 0.5,
-                }}
-                style={styles.chart}
                 fromZero
                 showBarTops
-                withHorizontalLabels
+                withInnerLines={true}    
+                withVerticalLines={true}   
+                withHorizontalLabels={true}
+                chartConfig={{
+                  backgroundColor: '#ffffff',
+                  backgroundGradientFrom: '#ffffff',
+                  backgroundGradientTo: '#ffffff',
+                  decimalPlaces: 2,
+                  color: () => `rgba(0, 150, 136, 1)`,
+                  labelColor: () => `rgba(0, 150, 136, 1)`,
+                  propsForLabels: {
+                    fontWeight: '600',
+                  },
+                  // Note: strokeDasharray (dotted lines) is not supported here
+                }}
+                style={styles.chart}
               />
               <Text style={styles.xAxisLabel}>Plant Age (Weeks)</Text>
             </View>
@@ -139,16 +147,19 @@ const FertilizerHistoryScreen = () => {
                 width={screenWidth - 100}
                 height={300}
                 chartConfig={{
-                  backgroundColor: '#e0f2f1',
-                  backgroundGradientFrom: '#b2dfdb',
-                  backgroundGradientTo: '#80cbc4',
+                  backgroundColor: '#ffffff',
+                  backgroundGradientFrom: '#ffffff',
+                  backgroundGradientTo: '#ffffff',
                   decimalPlaces: 2,
-                  color: (opacity = 1) => `rgba(0, 150, 136, ${opacity})`,
-                  labelColor: (opacity = 1) => `rgba(0, 150, 136, ${opacity})`,
+                  color: () => `rgba(0, 150, 136, 1)`,
+                  labelColor: () => `rgba(0, 150, 136, 1)`,
                   propsForDots: {
                     r: '4',
                     strokeWidth: '2',
                     stroke: '#009688',
+                  },
+                  propsForLabels: {
+                    fontWeight: '600',
                   },
                 }}
                 style={styles.chart}
@@ -224,6 +235,15 @@ const styles = StyleSheet.create({
   },
   chart: {
     borderRadius: 16,
+  },
+  chartLegend: {
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  legendText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#009688',
   },
   error: {
     color: '#c62828',

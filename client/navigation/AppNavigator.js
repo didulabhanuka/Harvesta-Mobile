@@ -5,9 +5,8 @@ import SplashScreen from '../components/SplashScreen';
 import WelcomeScreen from '../components/WelcomeScreen';
 
 import HomeScreen from '../screens/HomeScreen';
-import FertilizationScreen from '../screens/FertilizationScreen';
 
-// import DiseaseDetectionScreen from '../screens/DiseaseDetectionScreen';
+
 import ImageUploadScreen from '../screens/disease/DiseaseImageUpload';
 import MainDiseaseDetectionScreen from '../screens/disease/MainDiseaseDetectionScreen';
 import DiseaseInfoScreen from '../screens/disease/DiseaseInfoScreen';
@@ -23,6 +22,7 @@ import HarvestScreen from '../screens/harvest/HarvestScreen';
 import UploadHarvestImageScreen from '../screens/harvest/UploadHarvestImageScreen';
 import HistoricalDataScreen from '../screens/harvest/HistoricalDataScreen';
 
+import FertilizationScreen from '../screens/fertilizer/FertilizationScreen';
 import FertilizerDetailsScreen from '../screens/fertilizer/FertilizerDetailsScreen';
 import FertilizerHistoryScreen from '../screens/fertilizer/FertilizerHistoryScreen';
 import IrrigationDetailsScreen from '../screens/fertilizer/IrrigationDetailsScreen';
