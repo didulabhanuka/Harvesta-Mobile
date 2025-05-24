@@ -12,6 +12,7 @@ import ImageUploadScreen from '../screens/disease/DiseaseImageUpload';
 import MainDiseaseDetectionScreen from '../screens/disease/MainDiseaseDetectionScreen';
 import DiseaseInfoScreen from '../screens/disease/DiseaseInfoScreen';
 import DiseaseHistoryScreen from '../screens/disease/DiseaseHistoryScreen';
+import HistoryDetailScreen from '../screens/disease/HistoryDetailScreen';
 import ActionScheduleScreen from '../screens/disease/ActionScheduleScreen';
 import ReminderSettingsScreen from '../screens/disease/ReminderSettingsScreen';
 
@@ -63,6 +64,7 @@ function DiseaseDetectionStackScreen({ navigation }) {
       <Stack.Screen name="ImageUploadScreen" component={ImageUploadScreen} />
       <Stack.Screen name="DiseaseInfo" component={DiseaseInfoScreen} />
       <Stack.Screen name="DiseaseHistoryScreen" component={DiseaseHistoryScreen} />
+      <Stack.Screen name="HistoryDetail" component={HistoryDetailScreen} />
         <Stack.Screen name="ActionSchedule" component={ActionScheduleScreen}/>
     <Stack.Screen name="ReminderSettings" component={ReminderSettingsScreen}/>
     </Stack.Navigator>

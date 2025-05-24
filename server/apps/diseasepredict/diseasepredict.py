@@ -1,3 +1,4 @@
+
 import os
 import torch
 import timm
@@ -32,7 +33,6 @@ class TomatoDiseaseClassifier(torch.nn.Module):
         output = self.classifier(x)
         return output
 
-
 # Define severity classification model
 class TomatoDiseaseSeverityClassifier(torch.nn.Module):
     def __init__(self, num_classes=4):
@@ -49,7 +49,6 @@ class TomatoDiseaseSeverityClassifier(torch.nn.Module):
         output = self.classifier(x)
         return output
 
-
 # Load models
 disease_model = TomatoDiseaseClassifier(num_classes=10)
 severity_model = TomatoDiseaseSeverityClassifier(num_classes=4)
@@ -63,106 +62,126 @@ disease_model.eval()
 severity_model.eval()
 
 # Image transformation for prediction
-transform = transforms.Compose([
-    transforms.Resize((128, 128)),
-    transforms.ToTensor(),
-])
+transform = transforms.Compose([transforms.Resize((128, 128)), transforms.ToTensor()])
 
-# Load recommendations
+# Load recommendations from a CSV file
 df = pd.read_csv("apps/diseasepredict/models/Tomato_Bacterial_Spot_Recommendations.csv")
 
 
-def get_recommendations(severity):
-    if severity != 'Tomato_healthy':
-        recommendations = df[df["Severity Level"] == severity]["Recommendations"].tolist()
-        return recommendations
+
+def get_recs_by_day(severity_label: str) -> dict:
+    filtered = df[df["Severity Level"] == severity_label]
+    grouped  = filtered.groupby("Time (Days)")["Recommendations"].apply(list).to_dict()
+    out = {}
+    for day_str, recs in grouped.items():
+        n = int(day_str.split()[-1])  # “Day 1” → 1
+        out[f"Day{n}"] = recs
+    return out
+
+
+def get_recommendations(severity_label):
+    # only pull if it’s not the “Healthy” case
+    if severity_label != "Healthy":
+        return (
+            df[df["Severity Level"] == severity_label]
+              ["Recommendations"]
+              .tolist()
+        )
     return []
 
+def convert_image_to_base64(img: Image.Image) -> str:
+    buf = BytesIO(); img.save(buf, format="JPEG")
+    return base64.b64encode(buf.getvalue()).decode('utf-8')
 
-def convert_image_to_base64(image):
-    """Converts image to base64 string."""
-    byte_io = BytesIO()
-    image.save(byte_io, format="JPEG")
-    byte_data = byte_io.getvalue()
-    base64_string = base64.b64encode(byte_data).decode('utf-8')  # Convert byte data to base64 string
-    return base64_string
+    
+def update_selected_actions(report_id: str, day: int, actions: list):
+    """This function updates the selected actions in Firestore for the specific report ID and day."""
+    # writes { selected_actions.DayX: [..] } into the same doc
+    field = f"selected_actions.Day{day}"
+    db.collection("disease_reports").document(report_id).update({field: actions})
 
 
-def save_image_to_firestore(image_base64):
-    """Saves image base64 string to Firestore."""
-    try:
-        data = {
-            "image_base64": image_base64,  # Store the base64 string of the image
-            "timestamp": datetime.utcnow().isoformat()
-        }
         
-        # Save to Firestore collection 'images'
-        db.collection("images").add(data)
-        print(f"Saved image to Firestore.")
-    except Exception as e:
-        print(f"Error saving image to Firestore: {e}")
-
-
+#after scan image save data in firestore
 def save_disease_prediction_to_firestore(predicted_disease, predicted_severity, recommendations, image_base64):
-    """Save the disease prediction data to Firestore."""
+    """Save the disease prediction data to Firestore and return the reportId."""
     try:
         data = {
             "predicted_disease": predicted_disease,
             "predicted_severity": predicted_severity,
             "recommendations": recommendations,
             "timestamp": datetime.utcnow().isoformat(),
-            "image_base64": image_base64  # Store the image base64 in Firestore
+            "image_base64": image_base64,
+            "selected_actions": {},
         }
 
-        db.collection("disease_reports").add(data)
-        print(f"Saved disease prediction to Firestore: {data}")
+        _, doc_ref = db.collection("disease_reports").add(data)
+        report_id = doc_ref.id
+
+        print(f"Saved disease prediction to Firestore with reportId: {report_id}")
+        return report_id
 
     except Exception as e:
-        print(f"Error saving disease prediction data: {e}")
+        print(f"Error saving to Firestore: {e}")
+        return None
 
 
-def predict_disease_and_severity(file):
-    """Handle disease prediction and severity analysis."""
-    image = Image.open(file.stream).convert("RGB")
+def predict_disease_and_severity(file_stream) -> dict:
+    img      = Image.open(file_stream).convert("RGB")
+    img_b64  = convert_image_to_base64(img)
 
-    # Convert the image to base64 string
-    image_base64 = convert_image_to_base64(image)
-
-    # Save the base64 string to Firestore
-    save_image_to_firestore(image_base64)
-
-    # Disease prediction
-    image_tensor = transform(image).unsqueeze(0).to(device)
+    # predict
+    t = transform(img).unsqueeze(0).to(device)
     with torch.no_grad():
-        disease_outputs = disease_model(image_tensor)
-        _, predicted_disease = torch.max(disease_outputs, 1)
-
-    disease_class_names = [
-        'Tomato_Bacterial_spot', 'Tomato_Early_blight', 'Tomato_Late_blight', 'Tomato_Leaf_Mold',
-        'Tomato_Septoria_leaf_spot', 'Tomato_Spider_mites_Two_spotted_spider_mite', 'Tomato__Target_Spot',
-        'Tomato__Tomato_YellowLeaf__Curl_Virus', 'Tomato__Tomato_mosaic_virus', 'Tomato_healthy'
+        out = disease_model(t)
+        _, di = out.max(1)
+    labels = [
+      'Tomato_Bacterial_spot','Tomato_Early_blight','Tomato_Late_blight',
+      'Tomato_Leaf_Mold','Tomato_Septoria_leaf_spot',
+      'Tomato_Spider_mites_Two_spotted_spider_mite',
+      'Tomato__Target_Spot','Tomato__Tomato_YellowLeaf__Curl_Virus',
+      'Tomato__Tomato_mosaic_virus','Tomato_healthy'
     ]
-    predicted_disease_label = disease_class_names[predicted_disease.item()]
+    pred_dis = labels[di.item()]
 
-    # Severity prediction if disease is 'Bacterial Spot'
-    predicted_severity_label = 'N/A'
-    recommendations = []
-
-    if predicted_disease_label == 'Tomato_Bacterial_spot':
+    # severity & per‐day recs
+    pred_sev = "N/A"
+    recs_by_day = {}
+    if pred_dis == 'Tomato_Bacterial_spot':
         with torch.no_grad():
-            severity_outputs = severity_model(image_tensor)
-            _, predicted_severity = torch.max(severity_outputs, 1)
+            out2 = severity_model(t)
+            _, si = out2.max(1)
+        sev_labels = ['Mild','Moderate','Severe','Healthy']
+        pred_sev = sev_labels[si.item()]
+        recs_by_day = get_recs_by_day(pred_sev)
 
-        severity_class_names = ['Mild', 'Moderate', 'Severe', 'Healthy']
-        predicted_severity_label = severity_class_names[predicted_severity.item()]
-        recommendations = get_recommendations(predicted_severity_label)
-
-    # Save the disease prediction data to Firestore
-    save_disease_prediction_to_firestore(predicted_disease_label, predicted_severity_label, recommendations, image_base64)
-
+    # save & return
+    report_id = save_disease_prediction_to_firestore(pred_dis, pred_sev, recs_by_day, img_b64)
     return {
-        "predicted_disease": predicted_disease_label,
-        "predicted_severity": predicted_severity_label,
-        "recommendations": recommendations,
-        "image_base64": image_base64  # Return the base64 string as part of the response
+      "reportId": report_id,
+      "predicted_disease": pred_dis,
+      "predicted_severity": pred_sev,
+      "recommendations_by_day": recs_by_day,
+      "image_base64": img_b64
     }
+
+
+def list_reports():
+    """Return basic info for all saved reports."""
+    try:
+        reports = []
+        for doc in db.collection("disease_reports").stream():
+            data = doc.to_dict() or {}
+            img_b64 = data.get("image_base64", "")
+            # take a small thumbnail (first 100 chars) to keep payload light
+            thumb = img_b64[:100] if img_b64 else ""
+            reports.append({
+                "reportId":         doc.id,
+                "predicted_disease":   data.get("predicted_disease"),
+                "predicted_severity":  data.get("predicted_severity"),
+                "timestamp":           data.get("timestamp"),
+                "image_thumb":         thumb
+            })
+        return jsonify({"reports": reports}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

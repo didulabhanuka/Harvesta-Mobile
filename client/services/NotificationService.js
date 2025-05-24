@@ -21,30 +21,35 @@ export function scheduleManualNotification(message, date) {
 }
 
 /**
- * Schedule automatic recurring reminders based on disease severity.
- * - 'Severe': daily
- * - 'Moderate': every 5 days
- * - otherwise: every 7 days
- * @param {'Severe'|'Moderate'|string} severity
- * @returns {Promise<string>} - The ID of the scheduled notification.
+ * Schedule two daily reminders (8 AM & 8 PM) for plant disease action.
+ * This replaces the old interval-based reminders so you only get pinged morning & evening.
  */
-export function scheduleAutoReminder(severity) {
-  let intervalDays;
-  if (severity === 'Severe') {
-    intervalDays = 1;
-  } else if (severity === 'Moderate') {
-    intervalDays = 5;
-  } else {
-    intervalDays = 7;
-  }
-  const seconds = intervalDays * 24 * 60 * 60;
-  return Notifications.scheduleNotificationAsync({
+export async function scheduleAutoReminder() {
+  // optionally clear any previous ones for this app:
+  // await Notifications.cancelAllScheduledNotificationsAsync();
+
+  // Morning at 08:00
+  await Notifications.scheduleNotificationAsync({
     content: {
       title: 'Reminder',
       body: 'Take action for plant disease!',
     },
     trigger: {
-      seconds,
+      hour: 8,
+      minute: 0,
+      repeats: true,
+    },
+  });
+
+  // Evening at 20:00
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: 'Reminder',
+      body: 'Take action for plant disease!',
+    },
+    trigger: {
+      hour: 15,
+      minute: 0,
       repeats: true,
     },
   });

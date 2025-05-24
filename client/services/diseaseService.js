@@ -1,38 +1,54 @@
-import axios from 'axios';
+// services/diseaseService.js
 
-// Define the API endpoint (replace with your actual base URL)
-const BASE_URL = 'http://192.168.8.100:5000/harvesta-api/diseasepredict/predict'; // Replace with your backend URL
+import axios from "axios";
 
-// Function to upload the image and fetch disease info from the backend
-export const fetchDiseaseInfo = async (imageUri) => {
+// If you ever need to compute the host from Expo’s debuggerHost:
+// const host = Constants.manifest.debuggerHost.split(':')[0]
+// But if 192.168.1.113:5000 is correct, you’re good
+
+const BASE_URL =
+  "http://192.168.1.113:5000/harvesta-api/diseasepredict/predict";
+
+export async function fetchDiseaseInfo(imageUri) {
   try {
-    // Prepare form data
     const formData = new FormData();
-    formData.append('file', {
+    formData.append("file", {
       uri: imageUri,
-      type: 'image/jpeg',
-      name: 'image.jpg',
+      type: "image/jpeg",
+      name: "photo.jpg",
     });
 
-    // Send the image to the backend
-    const response = await axios.post(BASE_URL, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    const resp = await axios.post(BASE_URL, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+      timeout: 15000,
     });
 
-    // Handle the response from the backend
-    const diseaseInfo = response.data;
+    // your Flask now returns:
+    // {
+    //   reportId,
+    //   predicted_disease,
+    //   predicted_severity,
+    //   recommendations_by_day: { Day1:[…], Day3:[…], … },
+    //   image_base64
+    // }
 
-    // Return the disease information and base64 image
+    const {
+      reportId,
+      predicted_disease,
+      predicted_severity,
+      image_base64,
+      recommendations_by_day,
+    } = resp.data;
+
     return {
-      predicted_disease: diseaseInfo.predicted_disease,
-      predicted_severity: diseaseInfo.predicted_severity,
-      image_base64: diseaseInfo.image_base64, // Base64 image
-      recommendations: diseaseInfo.recommendations,
+      reportId,
+      predicted_disease,
+      predicted_severity,
+      image_base64,
+      recommendationsByDay: recommendations_by_day || {},
     };
-  } catch (error) {
-    console.error('Error fetching disease info:', error);
-    throw error;  // Throw error to be handled by calling component
+  } catch (err) {
+    console.error("[diseaseService] fetchDiseaseInfo failed:", err.message);
+    throw new Error("Unable to fetch disease information. Please try again.");
   }
-};
+}

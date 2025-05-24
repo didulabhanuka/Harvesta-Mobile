@@ -1,116 +1,101 @@
+// screens/disease/DiseaseDetectionScreen.js
+
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import {
+  SafeAreaView,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function DiseaseDetectionScreen() {
   const navigation = useNavigation();
 
-  // Handle navigation on button press
-  // const handleScanDisease = () => {
-  //   navigation.navigate('CameraScreen');
-  // };
-
-  const handleUploadImage = () => {
-    navigation.navigate('ImageUploadScreen');
-  };
-
-  const handleViewHistory = () => {
-   navigation.navigate('DiseaseHistoryScreen');
-  };
-
   return (
-    <View style={styles.container}>
-      {/* Logo/Image */}
-      {/* <Image
-        source={require('../assets/images/disease_identify.png')}
-        style={styles.logo}
-      /> */}
-      <Text style={styles.title}>Select Your Action</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.header}>Select Your Action</Text>
+      <View style={styles.buttons}>
+        <TouchableOpacity
+          style={[styles.card, styles.scan]}
+          onPress={() => navigation.navigate('CameraScreen')}
+        >
+          <Ionicons name="camera-outline" size={36} color="#40B59F" style={styles.icon} />
+          <Text style={styles.label}>Scan Plant Disease</Text>
+        </TouchableOpacity>
 
-      {/* Scan Disease Button */}
-      <TouchableOpacity
-        style={[styles.button, styles.scanButton]}
-        // onPress={handleScanDisease}
-      >
-        <Image
-          source={require('../../assets/jsons/scan_animation.json')}
-          style={styles.buttonImage}
-        />
-        <Text style={styles.buttonText}>Scan Plant Disease</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.card, styles.upload]}
+          onPress={() => navigation.navigate('ImageUploadScreen')}
+        >
+          <Ionicons name="cloud-upload-outline" size={36} color="#40B59F" style={styles.icon} />
+          <Text style={styles.label}>Upload Image</Text>
+        </TouchableOpacity>
 
-      {/* Upload Image Button */}
-      <TouchableOpacity
-        style={[styles.button, styles.uploadButton]}
-        onPress={handleUploadImage}
-      >
-        <Image
-          source={require('../../assets/jsons/upload_animation.json')}
-          style={styles.buttonImage}
-        />
-        <Text style={styles.buttonText}>Upload Image</Text>
-      </TouchableOpacity>
-
-      {/* View Plant History Button */}
-      <TouchableOpacity
-        style={[styles.button, styles.historyButton]}
-        onPress={handleViewHistory}
-      >
-        <Image
-          source={require('../../assets/jsons/history_animation.json')}
-          style={styles.buttonImage}
-        />
-        <Text style={styles.buttonText}>View Plant History</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={[styles.card, styles.history]}
+          onPress={() => navigation.navigate('DiseaseHistoryScreen')}
+        >
+          <Ionicons name="time-outline" size={36} color="#40B59F" style={styles.icon} />
+          <Text style={styles.label}>View Plant History</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#F4F8F7',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: '#fff',
+    padding: 20,
+    justifyContent: 'center'
   },
-  logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 40,
-  },
-  title: {
+  header: {
     fontSize: 24,
-    fontWeight: 'bold',
-    color: '#4d4c4a',
-    marginBottom: 30,
-  },
-  button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 20,
-    paddingHorizontal: 30,
-    borderRadius: 15,
+    fontWeight: '700',
     marginBottom: 20,
+    color: '#333',
+  },
+  buttons: {
     width: '100%',
   },
-  buttonImage: {
-    width: 80,
-    height: 80,
-    marginRight: 20,
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    paddingVertical: 30,
+    paddingHorizontal: 16,
+    marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    elevation: 2,
   },
-  buttonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#4d4c4a',
+  icon: {
+    marginRight: 16,
   },
-  scanButton: {
-    backgroundColor: '#a3f3b3',
+  label: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#333',
+    flexShrink: 1,
   },
-  uploadButton: {
-    backgroundColor: '#a3c8f3',
+  scan: {
+    borderLeftWidth: 6,
+    borderLeftColor: '#40B59F',
   },
-  historyButton: {
-    backgroundColor: '#f3b4a3',
+  upload: {
+    borderLeftWidth: 6,
+    borderLeftColor: '#40B59F',
+  },
+  history: {
+    borderLeftWidth: 6,
+    borderLeftColor: '#40B59F',
   },
 });

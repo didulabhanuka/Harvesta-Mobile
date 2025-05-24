@@ -1,12 +1,28 @@
 Disease,Severity Level,Time (Days),Recommendations
 Tomato Bacterial Spot,Mild,Day 1,Prune affected leaves and apply organic treatments like neem oil.
-Tomato Bacterial Spot,Mild,Day 1,Monitor closely for further signs of spread. Maintain proper spacing between plants for better airflow.
-Tomato Bacterial Spot,Mild,Day 1,"Consider using biological agents for early intervention (e.g., Bacillus subtilis, Trichoderma spp.)."
+Tomato Bacterial Spot,Mild,Day 1,Monitor closely for further signs of spread and maintain proper spacing for airflow.
+Tomato Bacterial Spot,Mild,Day 1,Consider using biological agents for early intervention (e.g. Bacillus subtilis/ Trichoderma spp.).
+Tomato Bacterial Spot,Mild,Day 3,Reapply neem oil or other approved organic sprays to any new lesions.
+Tomato Bacterial Spot,Mild,Day 3,Check humidity levels and improve ventilation around plants.
+Tomato Bacterial Spot,Mild,Day 3,Introduce compost tea or microbial soil drench to boost plant defenses.
+Tomato Bacterial Spot,Mild,Day 5,Increase frequency of organic treatments (every 5–7 days) if lesions persist.
+Tomato Bacterial Spot,Mild,Day 5,Inspect and remove any newly infected leaves; sanitize pruning tools between cuts.
+Tomato Bacterial Spot,Mild,Day 5,Supplement soil with micronutrient-rich amendments (e.g. calcium magnesium) to support recovery.
+Tomato Bacterial Spot,Moderate,Day 1,Prune infected foliage and dispose of it away from the planting area.
+Tomato Bacterial Spot,Moderate,Day 1,Apply a low-concentration copper-based spray to curb bacterial multiplication.
+Tomato Bacterial Spot,Moderate,Day 1,Ensure plants have at least 18–24 inches spacing to reduce moisture buildup.
+Tomato Bacterial Spot,Moderate,Day 3,Follow up with a second copper-based application as per label instructions.
+Tomato Bacterial Spot,Moderate,Day 3,Amend soil with coarse material (sand or perlite) to improve drainage.
+Tomato Bacterial Spot,Moderate,Day 3,Disinfect tools and gloves after each use to prevent cross-contamination.
 Tomato Bacterial Spot,Moderate,Day 5,Apply copper-based fungicides or bactericides to control bacterial spread.
 Tomato Bacterial Spot,Moderate,Day 5,Improve soil drainage to prevent waterlogging.
-Tomato Bacterial Spot,Moderate,Day 5,Remove heavily infected leaves and dispose of them away from the field to reduce further spread.
-Tomato Bacterial Spot,Severe,Day 10,Remove severely infected plants to prevent disease spread to healthy plants.
-Tomato Bacterial Spot,Severe,Day 10,"Disinfect gardening tools (e.g., pruning shears, gloves) and any surfaces that may have come in contact with infected material."
-Tomato Bacterial Spot,Severe,Day 10,Apply strong chemical treatments like streptomycin or kasugamycin.
-Tomato Bacterial Spot,Severe,Day 10,Quarantine affected plants to prevent the disease from spreading to other parts of the garden.
-Tomato Bacterial Spot,Severe,Day 10,Consider crop rotation with resistant tomato varieties or other crops not affected by bacterial spot.
+Tomato Bacterial Spot,Moderate,Day 5,Remove heavily infected leaves and dispose of them away from the field.
+Tomato Bacterial Spot,Severe,Day 1,Remove severely infected leaves or plants immediately to halt spread.
+Tomato Bacterial Spot,Severe,Day 1,Disinfect gardening tools gloves and any surfaces that contacted infected material.
+Tomato Bacterial Spot,Severe,Day 1,Apply a strong chemical bactericide (e.g. streptomycin or kasugamycin) following label rates.
+Tomato Bacterial Spot,Severe,Day 3,Reapply the chosen bactericide and ensure thorough coverage of all foliage.
+Tomato Bacterial Spot,Severe,Day 3,Reinforce quarantine measures: isolate affected area and restrict access.
+Tomato Bacterial Spot,Severe,Day 3,Apply a soil drench with an approved systemic bactericide to protect root zone.
+Tomato Bacterial Spot,Severe,Day 5,Assess remaining plants—remove any showing new symptoms to maintain a clean block.
+Tomato Bacterial Spot,Severe,Day 5,Continue chemical treatments at recommended intervals and monitor label for maximum applications.
+Tomato Bacterial Spot,Severe,Day 5,Plan crop rotation: designate this bed for non–Solanaceae crops next season to minimize inoculum.
