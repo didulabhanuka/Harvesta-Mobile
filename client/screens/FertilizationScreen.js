@@ -1,11 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function FertilizationScreen({ navigation }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Fertilization / Irrigation</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Choose Your Action</Text>
+      <Text style={styles.subtitle}>Helping your plants grow strong and healthy</Text>
 
       {/* Fertilizer Button */}
       <TouchableOpacity
@@ -24,7 +25,7 @@ export default function FertilizationScreen({ navigation }) {
         <Icon name="sprinkler" size={24} color="#fff" style={styles.buttonIcon} />
         <Text style={styles.buttonText}>Irrigation</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -37,10 +38,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 40,
+    marginBottom: 8,
     color: '#00796b',
+    fontFamily: 'Poppins',
+    textAlign: 'center',
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 30,
     fontFamily: 'Poppins',
     textAlign: 'center',
   },
@@ -54,7 +62,7 @@ const styles = StyleSheet.create({
     width: '80%',
     alignItems: 'center',
     justifyContent: 'center',
-    elevation: 5, // Adding shadow for a floating effect
+    elevation: 5,
   },
   buttonText: {
     color: '#fff',

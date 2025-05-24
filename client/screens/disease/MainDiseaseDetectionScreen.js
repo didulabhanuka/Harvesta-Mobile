@@ -9,39 +9,33 @@ import {
   StyleSheet
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export default function DiseaseDetectionScreen() {
   const navigation = useNavigation();
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Select Your Action</Text>
-      <View style={styles.buttons}>
-        <TouchableOpacity
-          style={[styles.card, styles.scan]}
-          onPress={() => navigation.navigate('CameraScreen')}
-        >
-          <Ionicons name="camera-outline" size={36} color="#40B59F" style={styles.icon} />
-          <Text style={styles.label}>Scan Plant Disease</Text>
-        </TouchableOpacity>
+      <Text style={styles.title}>Choose Your Action</Text>
+      <Text style={styles.subtitle}>Your plant’s health is just a tap away.</Text>
 
-        <TouchableOpacity
-          style={[styles.card, styles.upload]}
-          onPress={() => navigation.navigate('ImageUploadScreen')}
-        >
-          <Ionicons name="cloud-upload-outline" size={36} color="#40B59F" style={styles.icon} />
-          <Text style={styles.label}>Upload Image</Text>
-        </TouchableOpacity>
+      {/* Upload Image Button */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('ImageUploadScreen')}
+      >
+        <Icon name="cloud-upload" size={24} color="#fff" style={styles.buttonIcon} />
+        <Text style={styles.buttonText}>Upload Image</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity
-          style={[styles.card, styles.history]}
-          onPress={() => navigation.navigate('DiseaseHistoryScreen')}
-        >
-          <Ionicons name="time-outline" size={36} color="#40B59F" style={styles.icon} />
-          <Text style={styles.label}>View Plant History</Text>
-        </TouchableOpacity>
-      </View>
+      {/* View Plant History Button */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate('DiseaseHistoryScreen')}
+      >
+        <Icon name="history" size={24} color="#fff" style={styles.buttonIcon} />
+        <Text style={styles.buttonText}>View Plant History</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
@@ -49,53 +43,46 @@ export default function DiseaseDetectionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F4F8F7',
+    justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
-    justifyContent: 'center'
+    paddingHorizontal: 20,
+    backgroundColor: '#ffffff',
   },
-  header: {
-    fontSize: 24,
-    fontWeight: '700',
-    marginBottom: 20,
-    color: '#333',
+  title: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: '#00796b',
+    fontFamily: 'Poppins',
+    textAlign: 'center',
   },
-  buttons: {
-    width: '100%',
+  subtitle: {
+    fontSize: 16,
+    color: '#555',
+    marginBottom: 30,
+    fontFamily: 'Poppins',
+    textAlign: 'center',
   },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    paddingVertical: 30,
-    paddingHorizontal: 16,
-    marginBottom: 16,
+  button: {
     flexDirection: 'row',
+    backgroundColor: '#40B59F',
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    marginTop: 20,
+    width: '80%',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 6,
-    elevation: 2,
+    justifyContent: 'center',
+    elevation: 5,
   },
-  icon: {
-    marginRight: 16,
-  },
-  label: {
+  buttonText: {
+    color: '#fff',
     fontSize: 18,
     fontWeight: '600',
-    color: '#333',
-    flexShrink: 1,
+    marginLeft: 10,
+    fontFamily: 'Poppins',
   },
-  scan: {
-    borderLeftWidth: 6,
-    borderLeftColor: '#40B59F',
-  },
-  upload: {
-    borderLeftWidth: 6,
-    borderLeftColor: '#40B59F',
-  },
-  history: {
-    borderLeftWidth: 6,
-    borderLeftColor: '#40B59F',
+  buttonIcon: {
+    marginRight: 10,
   },
 });
