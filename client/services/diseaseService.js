@@ -1,36 +1,26 @@
-// services/diseaseService.js
+// /services/diseaseService.js
 
-import axios from "axios";
+import axios from 'axios';
 
-// If you ever need to compute the host from Expo’s debuggerHost:
-// const host = Constants.manifest.debuggerHost.split(':')[0]
-// But if 192.168.1.113:5000 is correct, you’re good
+// IMPORTANT: Update your base URL when moving to production server
+const BASE_URL = "http://172.20.10.3:5000/harvesta-api/diseasepredict";
 
-const BASE_URL =
-  "http://192.168.1.113:5000/harvesta-api/diseasepredict/predict";
+export const fetchDiseaseInfo = async (imageUri) => {
+  const formData = new FormData();
 
-export async function fetchDiseaseInfo(imageUri) {
+  formData.append('file', {
+    uri: imageUri,
+    type: 'image/jpeg',
+    name: 'photo.jpg',
+  });
+
   try {
-    const formData = new FormData();
-    formData.append("file", {
-      uri: imageUri,
-      type: "image/jpeg",
-      name: "photo.jpg",
-    });
-
-    const resp = await axios.post(BASE_URL, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const response = await axios.post(`${BASE_URL}/predict`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
       timeout: 15000,
     });
-
-    // your Flask now returns:
-    // {
-    //   reportId,
-    //   predicted_disease,
-    //   predicted_severity,
-    //   recommendations_by_day: { Day1:[…], Day3:[…], … },
-    //   image_base64
-    // }
 
     const {
       reportId,
@@ -38,7 +28,7 @@ export async function fetchDiseaseInfo(imageUri) {
       predicted_severity,
       image_base64,
       recommendations_by_day,
-    } = resp.data;
+    } = response.data;
 
     return {
       reportId,
@@ -47,8 +37,53 @@ export async function fetchDiseaseInfo(imageUri) {
       image_base64,
       recommendationsByDay: recommendations_by_day || {},
     };
-  } catch (err) {
-    console.error("[diseaseService] fetchDiseaseInfo failed:", err.message);
-    throw new Error("Unable to fetch disease information. Please try again.");
+  } catch (error) {
+    console.error('Error fetching disease info:', error.message);
+    throw error;
   }
-}
+};
+
+export const saveDayHistory = async (reportId, day, completedActions) => {
+  try {
+    const response = await axios.post(`${BASE_URL}/history`, {
+      reportId,
+      day,
+      completedActions,
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error saving day history:', error.response?.data || error.message);
+    throw error;
+  }
+};
+
+export const fetchAllReports = async () => {
+  try {
+    const response = await axios.get(`${BASE_URL}/reports`);
+    return response.data.reports || [];
+  } catch (error) {
+    console.error('Error fetching disease reports:', error.message);
+    throw error;
+  }
+};
+
+export const fetchReportById = async (reportId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/reports/${reportId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching report by ID (${reportId}):`, error.message);
+    throw error;
+  }
+};
+
+export const fetchReportHistoryById = async (reportId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/history/${reportId}`);
+    return response.data.selected_actions || {};
+  } catch (error) {
+    console.error(`Error fetching report history for ID (${reportId}):`, error.message);
+    throw error;
+  }
+};

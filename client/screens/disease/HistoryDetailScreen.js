@@ -1,18 +1,13 @@
-
+// screens/disease/HistoryDetailScreen.js
 
 import React, { useState, useCallback } from 'react';
 import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  ActivityIndicator,
-  Pressable,
-  StyleSheet
+  View, Text, ScrollView, Image,
+  ActivityIndicator, Pressable, StyleSheet
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fetchReportById, fetchHistoryByReportId } from '../../services/diseaseService';
 
 export default function HistoryDetailScreen({ route, navigation }) {
   const { reportId } = route.params;
@@ -20,16 +15,15 @@ export default function HistoryDetailScreen({ route, navigation }) {
   const [report, setReport] = useState(null);
   const [history, setHistory] = useState({});
 
-  // load both report and history
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
       const [rRes, hRes] = await Promise.all([
-        axios.get(`http://192.168.1.113:5000/harvesta-api/diseasepredict/reports/${reportId}`),
-        axios.get(`http://192.168.1.113:5000/harvesta-api/diseasepredict/history/${reportId}`)
+        fetchReportById(reportId),
+        fetchHistoryByReportId(reportId)
       ]);
-      setReport(rRes.data);
-      setHistory(hRes.data.selected_actions || {});
+      setReport(rRes);
+      setHistory(hRes.selected_actions || {});
     } catch (e) {
       console.error(e);
     } finally {
@@ -37,17 +31,13 @@ export default function HistoryDetailScreen({ route, navigation }) {
     }
   }, [reportId]);
 
-  // refresh data whenever screen is focused
-  useFocusEffect(
-    useCallback(() => {
-      loadData();
-    }, [loadData])
-  );
+  useFocusEffect(useCallback(() => { loadData(); }, [loadData]));
 
   const viewActionPlan = useCallback(async () => {
     if (!report) return;
     const byDay = report.recommendations_by_day || report.recommendations || {};
     if (!Object.keys(byDay).length) return;
+
     const json = await AsyncStorage.getItem('dayOffsets');
     const DEFAULT_OFFSETS = [1, 3, 5];
     const offsets = json ? JSON.parse(json) : DEFAULT_OFFSETS;
@@ -87,17 +77,13 @@ export default function HistoryDetailScreen({ route, navigation }) {
       )}
 
       <Text style={styles.title}>{report.predicted_disease}</Text>
-      <View
-        style={[
-          styles.badge,
-          report.predicted_severity === 'Severe' ? styles.badgeSevere : styles.badgeMild
-        ]}
-      >
+      <View style={[
+        styles.badge,
+        report.predicted_severity === 'Severe' ? styles.badgeSevere : styles.badgeMild
+      ]}>
         <Text style={styles.badgeText}>{report.predicted_severity}</Text>
       </View>
-      <Text style={styles.date}>
-        Diagnosed: {new Date(report.timestamp).toLocaleString()}
-      </Text>
+      <Text style={styles.date}>Diagnosed: {new Date(report.timestamp).toLocaleString()}</Text>
 
       {Object.entries(perDay).map(([day]) => (
         <View key={day} style={styles.dayCard}>
@@ -146,15 +132,11 @@ const styles = StyleSheet.create({
   date: { fontSize: 12, color: '#666', textAlign: 'center', marginBottom: 24 },
 
   dayCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 18,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
+    backgroundColor: '#fff', borderRadius: 12,
+    padding: 18, marginBottom: 20,
+    shadowColor: '#000', shadowOpacity: 0.05,
     shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    elevation: 3
+    shadowRadius: 6, elevation: 3
   },
   dayHeader: { fontSize: 20, fontWeight: '600', color: '#333', marginBottom: 12 },
   userText: { fontSize: 16, color: '#333', marginBottom: 8, lineHeight: 24, paddingLeft: 4 },
@@ -162,23 +144,15 @@ const styles = StyleSheet.create({
 
   buttonRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 16 },
   primaryButton: {
-    flex: 1,
-    backgroundColor: '#40B59F',
-    paddingVertical: 12,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flex: 1, backgroundColor: '#40B59F',
+    paddingVertical: 12, borderRadius: 8,
+    justifyContent: 'center', alignItems: 'center',
     marginRight: 8
   },
   secondaryButton: {
-    flex: 1,
-    backgroundColor: '#fff',
-    borderWidth: 1,
-    borderColor: '#40B59F',
-    paddingVertical: 12,
-    borderRadius: 8,
-    justifyContent: 'center',
-    alignItems: 'center'
+    flex: 1, backgroundColor: '#fff', borderWidth: 1,
+    borderColor: '#40B59F', paddingVertical: 12,
+    borderRadius: 8, justifyContent: 'center', alignItems: 'center'
   },
   buttonPressed: { opacity: 0.7 },
   primaryText: { color: '#fff', fontSize: 16, fontWeight: '600' },
