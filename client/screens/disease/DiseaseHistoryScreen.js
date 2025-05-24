@@ -1,146 +1,131 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
-import { CachedImage } from 'react-native-expo-cached-image'; // For cached network image
+// screens/disease/HistoryListScreen.js
 
-const DiseaseHistoryScreen = () => {
-  const [diagnosisHistory, setDiagnosisHistory] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const navigation = useNavigation();
+import React, { useState, useEffect } from 'react';
+import {
+  View, Text, FlatList, TouchableOpacity,
+  StyleSheet, ActivityIndicator, Image
+} from 'react-native';
+import axios from 'axios';
+import { Ionicons } from '@expo/vector-icons';
+
+export default function HistoryListScreen({ navigation }) {
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDiagnosisHistory = async () => {
-      try {
-        const db = getFirestore();
-        const querySnapshot = await getDocs(collection(db, 'disease_reports'));
-        const fetchedData = querySnapshot.docs.map((doc) => {
-          const data = doc.data();
-          const date = data.timestamp?.toDate().toISOString().split('T')[0] || 'Unknown';
-          return {
-            id: doc.id,
-            disease: data.disease || 'Unknown',
-            severity: data.stage || 'Unknown',
-            image: data.image_url,
-            detectedDate: date,
-          };
-        });
-        setDiagnosisHistory(fetchedData);
-      } catch (error) {
-        console.error('Error fetching diagnosis history: ', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchDiagnosisHistory();
+    axios.get('http://192.168.1.113:5000/harvesta-api/diseasepredict/reports')
+      .then(({ data }) => setReports(data.reports || []))
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="#40B59F" />
+      </View>
+    );
+  }
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.card}
-      onPress={() => navigation.navigate('DiseaseDetailScreen', { documentId: item.id })}
+      onPress={() => navigation.navigate('HistoryDetail', { reportId: item.reportId })}
     >
-      <Image
-        source={item.image ? { uri: item.image } : require('../../assets/icon.png')}
-        style={styles.image}
-      />
-      <View style={styles.cardContent}>
-        <Text style={styles.diseaseText}>Disease: {item.disease}</Text>
-        <Text
-          style={[
-            styles.severityText,
-            item.severity === 'Severe'
-              ? styles.severe
-              : item.severity === 'Moderate'
-              ? styles.moderate
-              : styles.mild,
-          ]}
-        >
-          Severity: {item.severity}
+      {item.image_base64 ? (
+        <Image
+          source={{ uri: `data:image/jpeg;base64,${item.image_base64}` }}
+          style={styles.thumb}
+        />
+      ) : (
+        <Ionicons name="image-outline" size={60} color="#ccc" style={styles.thumb} />
+      )}
+      <View style={styles.info}>
+        <Text style={styles.disease}>{item.predicted_disease}</Text>
+        <Text style={styles.date}>
+          {new Date(item.timestamp).toLocaleDateString()}
         </Text>
-        <Text style={styles.dateText}>Detected Date: {item.detectedDate}</Text>
+      </View>
+      <View style={[
+        styles.badge,
+        { backgroundColor: item.predicted_severity === 'Severe' ? '#FF4C4C' : '#40B59F' }
+      ]}>
+        <Text style={styles.badgeText}>{item.predicted_severity}</Text>
       </View>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Disease Diagnosis History</Text>
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#40B59F" />
-      ) : (
-        <FlatList
-          data={diagnosisHistory}
-          keyExtractor={(item) => item.id}
-          renderItem={renderItem}
-        />
-      )}
+      {/* Page Heading */}
+      <Text style={styles.headerTitle}>Diagnosis History</Text>
+
+      <FlatList
+        data={reports}
+        keyExtractor={r => r.reportId}
+        renderItem={renderItem}
+        contentContainerStyle={styles.listContent}
+        ListEmptyComponent={<Text style={styles.emptyText}>No history yet.</Text>}
+      />
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    paddingTop: 30,
-    paddingHorizontal: 20,
+    backgroundColor: '#F4F4F9',
+    marginTop: 50, // Adds space at top of the screen
   },
-  title: {
+  headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#333',
-    textAlign: 'center',
-    marginBottom: 20,
+    marginTop: 16,
+    marginHorizontal: 16,
+    marginBottom: 8,
+  },
+  listContent: {
+    paddingHorizontal: 16,
+    paddingBottom: 16
+  },
+  loader: {
+    flex: 1, justifyContent: 'center', alignItems: 'center'
   },
   card: {
     flexDirection: 'row',
-    backgroundColor: '#f9f9f9',
-    borderRadius: 12,
-    marginBottom: 16,
-    padding: 16,
     alignItems: 'center',
+    backgroundColor: '#fff',
+    padding: 12,
+    marginBottom: 12,
+    borderRadius: 8,
     shadowColor: '#000',
+    shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
     shadowRadius: 4,
-    elevation: 4,
+    elevation: 2,
   },
-  image: {
-    width: 80,
-    height: 80,
-    borderRadius: 12,
-    marginRight: 16,
-    backgroundColor: '#e0e0e0',
+  thumb: {
+    width: 60, height: 60, borderRadius: 8, marginRight: 12
   },
-  cardContent: {
-    flex: 1,
+  info: {
+    flex: 1
   },
-  diseaseText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
+  disease: {
+    fontSize: 16, fontWeight: '600', color: '#333'
   },
-  severityText: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 4,
+  date: {
+    fontSize: 12, color: '#666', marginTop: 4
   },
-  severe: {
-    color: '#FF4C4C',
+  badge: {
+    paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6
   },
-  moderate: {
-    color: '#FFA500',
+  badgeText: {
+    color: '#fff', fontSize: 12, fontWeight: '500'
   },
-  mild: {
-    color: '#4CAF50',
-  },
-  dateText: {
-    fontSize: 12,
-    color: '#888',
-  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 50,
+    color: '#666'
+  }
 });
-
-export default DiseaseHistoryScreen;
