@@ -53,7 +53,7 @@ const FertilizerHistoryScreen = () => {
         const barLabels = sortedAges.map(age => `${age}`);
         const barAveragedValues = sortedAges.map(
           age => groupedFertilizer[age].total / groupedFertilizer[age].count
-        );
+        );  
 
         setBarChartData({
           labels: barLabels,
@@ -171,7 +171,7 @@ export default FertilizerHistoryScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#e0f2f1',
+    backgroundColor: '#ffffff',
   },
   scrollContent: {
     padding: 16,

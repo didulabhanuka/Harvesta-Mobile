@@ -248,7 +248,7 @@ const pickerStyles = {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
-    backgroundColor: '#e0f2f1',
+    backgroundColor: '#ffffff',
     flexGrow: 1,
   },
   header: {
