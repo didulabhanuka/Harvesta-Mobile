@@ -64,6 +64,7 @@ const IrrigationDetailsScreen = () => {
         style={styles.historyButton}
         onPress={() => navigation.navigate('IrrigationHistoryScreen')}
       >
+        <Icon name="history" size={20} color="white" style={styles.historyIcon} />
         <Text style={styles.historyButtonText}>History</Text>
       </TouchableOpacity>
 
@@ -172,18 +173,23 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
   },
   historyButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
     alignSelf: 'flex-start',
-    backgroundColor: '#00796b',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    backgroundColor: '#40b59f',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 8,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   historyButtonText: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 14,
+    fontWeight: '600',
     fontFamily: 'Poppins',
+  },
+  historyIcon: {
+    marginRight: 8,
   },
   card: {
     backgroundColor: '#ffffff',

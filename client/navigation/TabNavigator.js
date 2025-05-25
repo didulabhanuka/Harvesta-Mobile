@@ -17,11 +17,11 @@ export default function TabNavigator({ screens }) {
           if (route.name === 'Fertilization') {
             iconName = focused ? 'water' : 'water-outline';
           } else if (route.name === 'Disease Detection') {
-            iconName = focused ? 'bug' : 'bug-outline';
+            iconName = focused ? 'bug' : 'shield-outline';
           } else if (route.name === 'Home') {
             iconName = focused ? 'home' : 'home-outline';
           } else if (route.name === 'Pest Management') {
-            iconName = focused ? 'shield' : 'shield-outline';
+            iconName = focused ? 'shield' : 'bug-outline';
           } else if (route.name === 'Harvest') {
             iconName = focused ? 'leaf' : 'leaf-outline';
           }

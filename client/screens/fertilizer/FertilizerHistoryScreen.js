@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { BarChart, LineChart } from 'react-native-chart-kit';
-
 import { fetchFertilizerHistory } from '../../services/fertilizerServices';
 
 const k = 0.05;
@@ -100,73 +99,76 @@ const FertilizerHistoryScreen = () => {
         <ActivityIndicator size="large" color="#00796b" />
       ) : barChartData ? (
         <>
-          <View style={styles.chartRow}>
-            <View style={styles.yAxisLabelWrapper}>
-              <Text style={styles.yAxisLabel}>Fertilizer (mg)</Text>
-            </View>
-            <View>
-              <View style={styles.chartLegend}>
-                <Text style={styles.legendText}>Avg Fertilizer Value (mg)</Text>
+          <View style={styles.card}>
+            <View style={styles.chartRow}>
+              <View style={styles.yAxisLabelWrapper}>
+                <Text style={styles.yAxisLabel}>Fertilizer (mg)</Text>
               </View>
-              <BarChart
-                data={barChartData}
-                width={screenWidth - 100}
-                height={300}
-                yAxisSuffix="mg"
-                fromZero
-                showBarTops
-                withInnerLines={true}    
-                withVerticalLines={true}   
-                withHorizontalLabels={true}
-                chartConfig={{
-                  backgroundColor: '#ffffff',
-                  backgroundGradientFrom: '#ffffff',
-                  backgroundGradientTo: '#ffffff',
-                  decimalPlaces: 2,
-                  color: () => `rgba(0, 150, 136, 1)`,
-                  labelColor: () => `rgba(0, 150, 136, 1)`,
-                  propsForLabels: {
-                    fontWeight: '600',
-                  },
-                  // Note: strokeDasharray (dotted lines) is not supported here
-                }}
-                style={styles.chart}
-              />
-              <Text style={styles.xAxisLabel}>Plant Age (Weeks)</Text>
+              <View>
+                <View style={styles.chartLegend}>
+                  <Text style={styles.legendText}>Avg Fertilizer Value (mg)</Text>
+                </View>
+                <BarChart
+                  data={barChartData}
+                  width={screenWidth - 100}
+                  height={300}
+                  yAxisSuffix="mg"
+                  fromZero
+                  showBarTops
+                  withInnerLines
+                  withVerticalLines
+                  withHorizontalLabels
+                  chartConfig={{
+                    backgroundColor: '#ffffff',
+                    backgroundGradientFrom: '#ffffff',
+                    backgroundGradientTo: '#ffffff',
+                    decimalPlaces: 2,
+                    color: () => `rgba(0, 150, 136, 1)`,
+                    labelColor: () => `rgba(0, 150, 136, 1)`,
+                    propsForLabels: {
+                      fontWeight: '600',
+                    },
+                  }}
+                  style={styles.chart}
+                />
+                <Text style={styles.xAxisLabel}>Plant Age (Weeks)</Text>
+              </View>
             </View>
           </View>
 
           <Text style={styles.subHeader}>Soil Quality Index (SQI) Over Time</Text>
-          <View style={styles.chartRow}>
-            <View style={styles.yAxisLabelWrapper}>
-              <Text style={styles.yAxisLabel}>SQI</Text>
-            </View>
-            <View>
-              <LineChart
-                data={sqiChartData}
-                width={screenWidth - 100}
-                height={300}
-                chartConfig={{
-                  backgroundColor: '#ffffff',
-                  backgroundGradientFrom: '#ffffff',
-                  backgroundGradientTo: '#ffffff',
-                  decimalPlaces: 2,
-                  color: () => `rgba(0, 150, 136, 1)`,
-                  labelColor: () => `rgba(0, 150, 136, 1)`,
-                  propsForDots: {
-                    r: '4',
-                    strokeWidth: '2',
-                    stroke: '#009688',
-                  },
-                  propsForLabels: {
-                    fontWeight: '600',
-                  },
-                }}
-                style={styles.chart}
-                withShadow
-                bezier
-              />
-              <Text style={styles.xAxisLabel}>Plant Age (Weeks)</Text>
+          <View style={styles.card}>
+            <View style={styles.chartRow}>
+              <View style={styles.yAxisLabelWrapper}>
+                <Text style={styles.yAxisLabel}>SQI</Text>
+              </View>
+              <View>
+                <LineChart
+                  data={sqiChartData}
+                  width={screenWidth - 100}
+                  height={300}
+                  chartConfig={{
+                    backgroundColor: '#ffffff',
+                    backgroundGradientFrom: '#ffffff',
+                    backgroundGradientTo: '#ffffff',
+                    decimalPlaces: 2,
+                    color: () => `rgba(0, 150, 136, 1)`,
+                    labelColor: () => `rgba(0, 150, 136, 1)`,
+                    propsForDots: {
+                      r: '4',
+                      strokeWidth: '2',
+                      stroke: '#009688',
+                    },
+                    propsForLabels: {
+                      fontWeight: '600',
+                    },
+                  }}
+                  style={styles.chart}
+                  withShadow
+                  bezier
+                />
+                <Text style={styles.xAxisLabel}>Plant Age (Weeks)</Text>
+              </View>
             </View>
           </View>
         </>
@@ -189,16 +191,16 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   header: {
-    fontSize: 18,
+    fontSize: 22,
     fontWeight: 'bold',
     color: '#00695c',
-    textAlign: 'center',
+    textAlign: 'left',
     marginTop: 30,
-    marginBottom: 16,
+    marginBottom: 20,
     fontFamily: 'Poppins',
   },
   subHeader: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#00695c',
     marginTop: 30,
@@ -249,5 +251,16 @@ const styles = StyleSheet.create({
     color: '#c62828',
     textAlign: 'center',
     marginTop: 20,
+  },
+  card: {
+    backgroundColor: '#f9f9f9',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 20,
+    shadowColor: '#40B59F',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
   },
 });

@@ -5,6 +5,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, FlatList, D
 import { Ionicons, MaterialIcons, FontAwesome5, Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
+import LottieView from 'lottie-react-native';
 import { fetchWeatherByCoords } from '../services/weatherService';  // Import service
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -19,13 +20,13 @@ const features = [
   {
     id: '2',
     title: 'Disease Detection',
-    icon: <MaterialIcons name="bug-report" size={30} color="#40B59F" />,
+    icon: <FontAwesome5 name="shield-virus" size={28} color="#40B59F" />,
     navigateTo: 'Disease Detection',
   },
   {
     id: '3',
     title: 'Pest Management',
-    icon: <FontAwesome5 name="shield-virus" size={28} color="#40B59F" />,
+    icon: <MaterialIcons name="bug-report" size={30} color="#40B59F" />,
     navigateTo: 'Pest Management',
   },
   {
@@ -93,10 +94,12 @@ export default function HomeScreen() {
           <Text style={styles.greeting}>Hello, Farmer 👋</Text>
           <Text style={styles.subGreeting}>{dateString}</Text>
         </View>
-        <Image
-          source={{ uri: 'https://i.pravatar.cc/150?img=12' }}
-          style={styles.avatar}
-        />
+        <LottieView
+            source={require('../assets/jsons/header.json')}
+            autoPlay
+            loop
+            style={styles.avatar}
+          />
       </View>
 
       {/* Weather Card */}
@@ -116,16 +119,6 @@ export default function HomeScreen() {
             </View>
           </>
         )}
-      </View>
-
-      {/* Search Bar */}
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={24} color="gray" style={styles.searchIcon} />
-        <TextInput
-          placeholder="Search..."
-          placeholderTextColor="gray"
-          style={styles.searchInput}
-        />
       </View>
 
       {/* Feature Buttons */}
@@ -156,7 +149,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   greeting: { fontSize: 24, fontWeight: 'bold', color: '#333' },
   subGreeting: { fontSize: 14, color: '#666', marginTop: 4 },
-  avatar: { width: 48, height: 48, borderRadius: 24 },
+  avatar: { width: 56, height: 56 },
   weatherCard: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#E3F2FD', borderRadius: 12, padding: 15, marginTop: 20 },
   weatherTemp: { fontSize: 18, fontWeight: 'bold', color: '#333' },
   weatherStatus: { fontSize: 14, color: '#666' },
