@@ -69,7 +69,20 @@ def get_remedies(pest):
         print(f"Error reading remedies file: {str(e)}")
         return {"error": f"Failed to read Excel file: {str(e)}"}
 
-def save_pest_detection_to_firebase(pest_name, probability, image_path):
+# def save_pest_detection_to_firebase(pest_name, probability, image_path):
+#     try:
+#         data = {
+#             "pest_name": pest_name,
+#             "probability": probability,
+#             "image_path": image_path.replace("\\", "/"),  # Fix path separators
+#             "timestamp": datetime.utcnow().isoformat()
+#         }
+#         db.collection("pest_detections").add(data)
+#         print(f"Saved pest detection to Firebase: {data}")
+
+#     except Exception as e:
+#         print(f"Error saving pest detection to Firebase: {e}")
+def save_pest_detection_to_firebase(pest_name, probability, image_path, harms=None, remedies=None):
     try:
         data = {
             "pest_name": pest_name,
@@ -77,12 +90,40 @@ def save_pest_detection_to_firebase(pest_name, probability, image_path):
             "image_path": image_path.replace("\\", "/"),  # Fix path separators
             "timestamp": datetime.utcnow().isoformat()
         }
+
+        if harms:
+            data["harms"] = harms
+        if remedies:
+            data["remedies"] = remedies
+
         db.collection("pest_detections").add(data)
         print(f"Saved pest detection to Firebase: {data}")
 
     except Exception as e:
         print(f"Error saving pest detection to Firebase: {e}")
 
+
+# def get_pest_detection_history():
+#     try:
+#         pest_detections_ref = db.collection("pest_detections")
+#         pest_detections = pest_detections_ref.stream()
+
+#         history = []
+#         for pest in pest_detections:
+#             pest_data = pest.to_dict()
+#             print(f"Fetched pest data: {pest_data}")  # Log the fetched data
+#             # Only append necessary fields: pest_name, image_path, and timestamp
+#             history.append({
+#                 "pest_name": pest_data.get("pest_name", ""),
+#                 "image_path": pest_data.get("image_path", ""),
+#                 "timestamp": pest_data.get("timestamp", "")
+#             })
+
+#         return history
+
+#     except Exception as e:
+#         print(f"Error fetching pest detection history: {str(e)}")
+#         return {"error": f"Failed to fetch pest detection history: {str(e)}"}
 def get_pest_detection_history():
     try:
         pest_detections_ref = db.collection("pest_detections")
@@ -91,12 +132,15 @@ def get_pest_detection_history():
         history = []
         for pest in pest_detections:
             pest_data = pest.to_dict()
-            print(f"Fetched pest data: {pest_data}")  # Log the fetched data
-            # Only append necessary fields: pest_name, image_path, and timestamp
+            print(f"Fetched pest data: {pest_data}")  # Debug log
+
             history.append({
                 "pest_name": pest_data.get("pest_name", ""),
+                "probability": pest_data.get("probability", ""),
                 "image_path": pest_data.get("image_path", ""),
-                "timestamp": pest_data.get("timestamp", "")
+                "timestamp": pest_data.get("timestamp", ""),
+                "harms": pest_data.get("harms", []),
+                "remedies": pest_data.get("remedies", [])
             })
 
         return history
@@ -104,6 +148,7 @@ def get_pest_detection_history():
     except Exception as e:
         print(f"Error fetching pest detection history: {str(e)}")
         return {"error": f"Failed to fetch pest detection history: {str(e)}"}
+
 
 # Add this function for pest detection
 def inference_pests(image_path):
@@ -135,7 +180,14 @@ def inference_pests(image_path):
         remedies["probability"] = prob  # Add probability to remedies response
 
         # Save the pest detection result to Firebase
-        save_pest_detection_to_firebase(label, prob, image_path)
+        # save_pest_detection_to_firebase(label, prob, image_path)
+        save_pest_detection_to_firebase(
+            pest_name=label,
+            probability=prob,
+            image_path=image_path,
+            harms=remedies.get("harms"),
+            remedies=remedies.get("remedies")
+        )   
         
         return remedies
 

@@ -2,6 +2,7 @@
 from flask import request, jsonify, current_app, send_from_directory
 from apps.pestmanagement import blueprint
 from apps.pestmanagement.pestmanagement import inference_pests
+from apps.pestmanagement.pestmanagement import get_pest_detection_history
 import os
 
 # Route to serve images
@@ -36,3 +37,7 @@ def get_pests_history():
         return jsonify({"error": history["error"]}), 500
 
     return jsonify({"history": history})
+
+@blueprint.route('/<path:filename>')
+def uploaded_file(filename):
+    return send_from_directory(os.path.join(blueprint.root_path, 'uploads'), filename)
