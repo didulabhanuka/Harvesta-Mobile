@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { fetchReportById, fetchHistoryByReportId } from '../../services/diseaseService';
+import { fetchReportById, fetchReportHistoryById } from '../../services/diseaseService';
 
 export default function HistoryDetailScreen({ route, navigation }) {
   const { reportId } = route.params;
@@ -20,7 +20,7 @@ export default function HistoryDetailScreen({ route, navigation }) {
     try {
       const [rRes, hRes] = await Promise.all([
         fetchReportById(reportId),
-        fetchHistoryByReportId(reportId)
+        fetchReportHistoryById(reportId)
       ]);
       setReport(rRes);
       setHistory(hRes.selected_actions || {});
