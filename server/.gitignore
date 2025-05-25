@@ -1,4 +1,4 @@
-# Virtual environments
+# Ignore virtual environment directory
 .venv/
 
 # Ignore compiled Python files
@@ -6,15 +6,81 @@ __pycache__/
 *.pyc
 *.pyo
 
-# Ignore static files if they are generated
+# Ignore directories containing static files
 static/
 
-# Ignore private files
+# Ignore Jupyter Notebook files
 .ipynb
-.py
+
+# Ignore Python files that are private or can be re-generated
+*.py
 *.json
 
-# Ignore private files & credentials
-*.json  
-!config.json  
-harvesta-24-25j-250-firebase-adminsdk.json  
+# Ignore private files & credentials (adjust to suit your project)
+# Allow a specific config file
+!config.json
+harvesta-24-25j-250-firebase-adminsdk.json
+
+# Ignore IDE-specific files (add if using specific IDE)
+.vscode/
+.idea/
+
+# Ignore temporary files created by editors or OS
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ─── Additional ignores ─────────────────────────────────────────────────────
+
+# Ignore any virtual environment folders anywhere
+**/venv/
+**/.venv/
+**/env/
+**/ENV/
+
+# If your venv lives under server/venv
+server/venv/
+
+# Byte-compiled, optimized, and DLL files
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+*.pyd
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+*.egg
+pip-wheel-metadata/
+
+# Installer logs and cache
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Flask/Django/Sphinx caches
+instance/
+.webassets-cache/
+docs/_build/
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+.pytest_cache/
+nose2-junit.xml
+junit-*.xml
+
+# Jupyter checkpoints & IPython
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# Node modules (if you ever add front-end)
+node_modules/
