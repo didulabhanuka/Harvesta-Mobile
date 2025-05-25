@@ -71,23 +71,17 @@ export default function UploadPestImageScreen() {
     }
   };
 
+  const handleRemoveImage = () => {
+    setImage(null);
+  };
+
   return (
     <View style={styles.container}>
-      {/* Custom Header */}
-      {/* <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Ionicons name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>Upload Pest Image</Text>
-      </View> */}
-
       <ScrollView
         contentContainerStyle={styles.scrollContainer}
         showsVerticalScrollIndicator={false}
       >
+        {/* Lottie Animation */}
         <LottieView
           source={require("../../assets/jsons/pest-upload.json")}
           autoPlay
@@ -95,25 +89,33 @@ export default function UploadPestImageScreen() {
           style={{ width: 220, height: 220 }}
         />
 
-        <Text style={styles.instructionText}>
-          Upload or capture a crop image to detect pests.
-        </Text>
+        {/* Instructions Card */}
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>Instructions:</Text>
+          <Text style={styles.infoText}>
+            1. Capture or select clear pest-affected crop images.{"\n"}
+            2. Make sure the image is clear and focused.{"\n"}
+            3. Remove the image if it’s not suitable before detection.
+          </Text>
+        </View>
 
+        {/* Preview with Remove Button */}
         {image && (
-          <Image source={{ uri: image.uri }} style={styles.previewImage} />
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: image.uri }} style={styles.previewImage} />
+            <TouchableOpacity style={styles.removeButton} onPress={handleRemoveImage}>
+              <Ionicons name="close" size={18} color="#fff" />
+            </TouchableOpacity>
+          </View>
         )}
 
+        {/* Action Buttons */}
         <View style={styles.buttonRow}>
           <TouchableOpacity
             style={styles.button}
             onPress={() => handleImagePick("camera")}
           >
-            <Ionicons
-              name="camera"
-              size={20}
-              color="#fff"
-              style={styles.icon}
-            />
+            <Ionicons name="camera" size={20} color="#fff" style={styles.icon} />
             <Text style={styles.buttonText}>Capture</Text>
           </TouchableOpacity>
 
@@ -121,22 +123,19 @@ export default function UploadPestImageScreen() {
             style={styles.button}
             onPress={() => handleImagePick("gallery")}
           >
-            <Ionicons
-              name="images"
-              size={20}
-              color="#fff"
-              style={styles.icon}
-            />
+            <Ionicons name="images" size={20} color="#fff" style={styles.icon} />
             <Text style={styles.buttonText}>Gallery</Text>
           </TouchableOpacity>
         </View>
 
+        {/* Predict Button */}
         <TouchableOpacity style={styles.uploadButton} onPress={handlePredict}>
           <Ionicons name="search" size={20} color="#fff" style={styles.icon} />
           <Text style={styles.buttonText}>Detect Pest</Text>
         </TouchableOpacity>
       </ScrollView>
 
+      {/* Loading Overlay */}
       {isLoading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#fff" />
@@ -149,40 +148,33 @@ export default function UploadPestImageScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: "#fff" },
-  header: {
-    backgroundColor: "#40B59F",
-    paddingTop: 50,
-    paddingBottom: 16,
-    paddingHorizontal: 16,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  backButton: {
-    marginRight: 12,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#fff",
-  },
   scrollContainer: {
     padding: 20,
     alignItems: "center",
-    paddingBottom: 40,
+    paddingBottom: 50,
   },
-  instructionText: {
-    fontSize: 16,
+  card: {
+    backgroundColor: "#f9f9f9",
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 20,
+    width: "100%",
+    shadowColor: "#40B59F",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
+  },
+  infoText: {
+    fontSize: 14,
     color: "#555",
-    marginBottom: 20,
-    textAlign: "center",
-  },
-  previewImage: {
-    width: screenWidth * 0.75,
-    height: screenWidth * 0.75,
-    borderRadius: 12,
-    marginBottom: 20,
-    borderColor: "#ccc",
-    borderWidth: 1,
+    textAlign: "left",
   },
   buttonRow: {
     flexDirection: "row",
@@ -228,5 +220,24 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  imageContainer: {
+    marginBottom: 20,
+    position: "relative",
+  },
+  previewImage: {
+    width: screenWidth * 0.75,
+    height: screenWidth * 0.75,
+    borderRadius: 12,
+    borderColor: "#ccc",
+    borderWidth: 1,
+  },
+  removeButton: {
+    position: "absolute",
+    top: -6,
+    right: -6,
+    backgroundColor: "#E53935",
+    borderRadius: 10,
+    padding: 2,
   },
 });

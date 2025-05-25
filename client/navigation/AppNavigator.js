@@ -1,11 +1,9 @@
 
-<<<<<<< HEAD
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./TabNavigator";
 import SplashScreen from "../components/SplashScreen";
 import WelcomeScreen from "../components/WelcomeScreen";
-=======
 import HomeScreen from '../screens/HomeScreen';
 
 
@@ -17,36 +15,20 @@ import HistoryDetailScreen from '../screens/disease/HistoryDetailScreen';
 import ActionScheduleScreen from '../screens/disease/ActionScheduleScreen';
 import ReminderSettingsScreen from '../screens/disease/ReminderSettingsScreen';
 
-
-import PestManagementScreen from '../screens/PestManagementScreen';
->>>>>>> 032393fbd56afe2ec31b9d6719977db0e85a4b46
-
-import HomeScreen from "../screens/HomeScreen";
-import FertilizationScreen from "../screens/FertilizationScreen";
-import DiseaseDetectionScreen from "../screens/DiseaseDetectionScreen";
-
-<<<<<<< HEAD
-import PestManagementScreen from "../screens/PestManagementScreen";
 import UploadPestImageScreen from "../screens/pest/UploadPestImageScreen";
 import PestResultScreen from "../screens/pest/PestResultScreen";
+import PestMainMenuScreen from "../screens/pest/PestMainMenuScreen";
+import PestHistoryScreen from "../screens/pest/PestHistoryScreen";
 
 import HarvestScreen from "../screens/harvest/HarvestScreen";
 import UploadHarvestImageScreen from "../screens/harvest/UploadHarvestImageScreen";
 import HistoricalDataScreen from "../screens/harvest/HistoricalDataScreen";
 
+import FertilizationScreen from "../screens/fertilizer/FertilizationScreen";
 import FertilizerDetailsScreen from "../screens/fertilizer/FertilizerDetailsScreen";
 import FertilizerHistoryScreen from "../screens/fertilizer/FertilizerHistoryScreen";
 import IrrigationDetailsScreen from "../screens/fertilizer/IrrigationDetailsScreen";
 import IrrigationHistoryScreen from "../screens/fertilizer/IrrigationHistoryScreen";
-import PestMainMenuScreen from "../screens/pest/PestMainMenuScreen";
-import PestHistoryScreen from "../screens/pest/PestHistoryScreen";
-=======
-import FertilizationScreen from '../screens/fertilizer/FertilizationScreen';
-import FertilizerDetailsScreen from '../screens/fertilizer/FertilizerDetailsScreen';
-import FertilizerHistoryScreen from '../screens/fertilizer/FertilizerHistoryScreen';
-import IrrigationDetailsScreen from '../screens/fertilizer/IrrigationDetailsScreen';
-import IrrigationHistoryScreen from '../screens/fertilizer/IrrigationHistoryScreen';
->>>>>>> 032393fbd56afe2ec31b9d6719977db0e85a4b46
 
 const Stack = createNativeStackNavigator();
 
@@ -100,12 +82,6 @@ function DiseaseDetectionStackScreen({ navigation }) {
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-<<<<<<< HEAD
-      <Stack.Screen
-        name="DiseaseDetectionMain"
-        component={DiseaseDetectionScreen}
-      />
-=======
       {/* <Stack.Screen name="DiseaseDetectionMain" component={DiseaseDetectionScreen} /> */}
       <Stack.Screen name="DiseaseDetectionScreen" component={MainDiseaseDetectionScreen} />
       <Stack.Screen name="ImageUploadScreen" component={ImageUploadScreen} />
@@ -114,7 +90,6 @@ function DiseaseDetectionStackScreen({ navigation }) {
       <Stack.Screen name="HistoryDetail" component={HistoryDetailScreen} />
         <Stack.Screen name="ActionSchedule" component={ActionScheduleScreen}/>
     <Stack.Screen name="ReminderSettings" component={ReminderSettingsScreen}/>
->>>>>>> 032393fbd56afe2ec31b9d6719977db0e85a4b46
     </Stack.Navigator>
   );
 }
@@ -132,7 +107,7 @@ function PestManagementStackScreen() {
       <Stack.Screen
         name="UploadPestImage"
         component={UploadPestImageScreen}
-        options={{ title: "Upload Image" }} // Back button appears here
+        options={{ headerShown: false }} // <-- Hide header here
       />
       <Stack.Screen
         name="PestResult"

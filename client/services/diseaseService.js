@@ -1,9 +1,5 @@
-// /services/diseaseService.js
-
 import axios from 'axios';
-
-// IMPORTANT: Update your base URL when moving to production server
-const BASE_URL = "http://172.20.10.3:5000/harvesta-api/diseasepredict";
+import { BASE_URL } from "@env"; // This imports from .env
 
 export const fetchDiseaseInfo = async (imageUri) => {
   const formData = new FormData();
@@ -15,7 +11,7 @@ export const fetchDiseaseInfo = async (imageUri) => {
   });
 
   try {
-    const response = await axios.post(`${BASE_URL}/predict`, formData, {
+    const response = await axios.post(`${BASE_URL}/diseasepredict/predict`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -45,7 +41,7 @@ export const fetchDiseaseInfo = async (imageUri) => {
 
 export const saveDayHistory = async (reportId, day, completedActions) => {
   try {
-    const response = await axios.post(`${BASE_URL}/history`, {
+    const response = await axios.post(`${BASE_URL}/diseasepredict/history`, {
       reportId,
       day,
       completedActions,
@@ -60,7 +56,7 @@ export const saveDayHistory = async (reportId, day, completedActions) => {
 
 export const fetchAllReports = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/reports`);
+    const response = await axios.get(`${BASE_URL}/diseasepredict/reports`);
     return response.data.reports || [];
   } catch (error) {
     console.error('Error fetching disease reports:', error.message);
@@ -70,7 +66,7 @@ export const fetchAllReports = async () => {
 
 export const fetchReportById = async (reportId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/reports/${reportId}`);
+    const response = await axios.get(`${BASE_URL}/diseasepredict/reports/${reportId}`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching report by ID (${reportId}):`, error.message);
@@ -80,7 +76,7 @@ export const fetchReportById = async (reportId) => {
 
 export const fetchReportHistoryById = async (reportId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/history/${reportId}`);
+    const response = await axios.get(`${BASE_URL}/diseasepredict/history/${reportId}`);
     return response.data.selected_actions || {};
   } catch (error) {
     console.error(`Error fetching report history for ID (${reportId}):`, error.message);

@@ -1,5 +1,5 @@
-
 import axios from "axios";
+import { BASE_URL } from "@env"; // This imports from .env
 
 export const predictPest = async (image) => {
   const formData = new FormData();
@@ -8,18 +8,15 @@ export const predictPest = async (image) => {
     name: image.name,
     type: image.type,
   });
-  // https://0226-2402-4000-2380-a01c-e4dd-a862-48a2-23f9.ngrok-free.app/harvesta-api/pestmanagement/pests
-  const response = await fetch(
-    "https://99b6-175-157-25-85.ngrok-free.app/harvesta-api/pestmanagement/pests",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Accept: "application/json",
-      },
-      body: formData,
-    }
-  );
+
+  const response = await fetch(`${BASE_URL}/pestmanagement/pests`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Accept: "application/json",
+    },
+    body: formData,
+  });
 
   if (!response.ok) {
     const error = await response.json();
@@ -32,9 +29,7 @@ export const predictPest = async (image) => {
 
 export const getPestHistory = async () => {
   try {
-    const response = await axios.get(
-      "https://99b6-175-157-25-85.ngrok-free.app/harvesta-api/pestmanagement/pests/history"
-    );
+    const response = await axios.get(`${BASE_URL}/pestmanagement/pests/history`);
     return response.data.history;
   } catch (error) {
     console.error("Error fetching pest history:", error);

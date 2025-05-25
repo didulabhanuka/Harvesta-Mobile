@@ -1,9 +1,5 @@
-// /services/harvestService.js
-
 import axios from 'axios';
-
-// IMPORTANT: Update your base URL when moving to production server
-const BASE_URL = "http://172.20.10.3:5000/harvesta-api/harvestingpredict";
+import { BASE_URL } from "@env"; // This imports from .env
 
 export const uploadImages = async (images) => {
   const formData = new FormData();
@@ -17,7 +13,7 @@ export const uploadImages = async (images) => {
   });
 
   try {
-    const response = await axios.post(`${BASE_URL}/predict`, formData, {
+    const response = await axios.post(`${BASE_URL}/harvestingpredict/predict`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -32,7 +28,7 @@ export const uploadImages = async (images) => {
 
 export const fetchHistoricalData = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/historical-data`);
+    const response = await axios.get(`${BASE_URL}/harvestingpredict/historical-data`);
     return response.data.historical_data; 
     // server returns { "historical_data": [...] }
   } catch (error) {
@@ -43,7 +39,7 @@ export const fetchHistoricalData = async () => {
 
 export const fetchLatestData = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/latest-data`);
+    const response = await axios.get(`${BASE_URL}/harvestingpredict/latest-data`);
     return response.data.latest_data; 
     // server returns { "latest_data": {...} }
   } catch (error) {

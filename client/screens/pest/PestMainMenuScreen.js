@@ -1,197 +1,95 @@
-// // /screens/pest/PestMainMenuScreen.js
-
-// import React from "react";
-// import {
-//   View,
-//   Text,
-//   StyleSheet,
-//   TouchableOpacity,
-//   Image,
-//   Dimensions,
-// } from "react-native";
-// import { useNavigation } from "@react-navigation/native";
-// import LottieView from "lottie-react-native";
-
-// const { width: screenWidth } = Dimensions.get("window");
-
-// export default function PestMainMenuScreen() {
-//   const navigation = useNavigation();
-
-//   return (
-//     <View style={styles.container}>
-//       <Text style={styles.headerText}>Pest Assistant</Text>
-
-//       <TouchableOpacity
-//         style={styles.tile}
-//         onPress={() => navigation.navigate("UploadPestImage")}
-//       >
-//         <View style={styles.lottieContainer}>
-//           <LottieView
-//             source={require("../../assets/jsons/pest-upload.json")} // Sample Lottie file
-//             autoPlay
-//             loop
-//             style={styles.lottie}
-//           />
-//         </View>
-//         <Image
-//           source={require("../../assets/jsons/pest-upload.json")} // Sample static image
-//           style={styles.iconImage}
-//         />
-//         <Text style={styles.tileText}>Detect Pests</Text>
-//       </TouchableOpacity>
-
-//       <TouchableOpacity
-//         style={styles.tile}
-//         onPress={() => navigation.navigate("PestHistory")}
-//       >
-//         <View style={styles.lottieContainer}>
-//           <LottieView
-//             source={require("../../assets/jsons/pest-upload.json")} // Another sample Lottie file
-//             autoPlay
-//             loop
-//             style={styles.lottie}
-//           />
-//         </View>
-//         <Image
-//           source={require("../../assets/jsons/pest-upload.json")} // Sample static image
-//           style={styles.iconImage}
-//         />
-//         <Text style={styles.tileText}>View History</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: "#fff",
-//     padding: 20,
-//     alignItems: "center",
-//   },
-//   headerText: {
-//     fontSize: 24,
-//     fontWeight: "bold",
-//     color: "#40B59F",
-//     marginBottom: 30,
-//   },
-//   tile: {
-//     backgroundColor: "#E8F6F3",
-//     borderRadius: 12,
-//     paddingVertical: 20,
-//     paddingHorizontal: 15,
-//     alignItems: "center",
-//     width: screenWidth * 0.85,
-//     marginBottom: 20,
-//     shadowColor: "#000",
-//     shadowOpacity: 0.1,
-//     shadowOffset: { width: 0, height: 2 },
-//     shadowRadius: 8,
-//     elevation: 3,
-//   },
-//   lottieContainer: {
-//     width: 120,
-//     height: 120,
-//     marginBottom: 10,
-//   },
-//   lottie: {
-//     width: "100%",
-//     height: "100%",
-//   },
-//   iconImage: {
-//     width: 30,
-//     height: 30,
-//     marginBottom: 10,
-//   },
-//   tileText: {
-//     fontSize: 18,
-//     fontWeight: "600",
-//     color: "#333",
-//   },
-// });
-
 import React from "react";
 import {
-  View,
+  SafeAreaView,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Image,
-  Dimensions,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
-const { width: screenWidth } = Dimensions.get("window");
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function PestMainMenuScreen() {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.headerText}>Pest Assistant</Text>
+    <SafeAreaView style={styles.container}>
+      <Text style={styles.title}>Choose Your Action</Text>
+      <Text style={styles.subtitle}>Protect your plants from pests with ease.</Text>
 
+      {/* Detect Pests Button */}
       <TouchableOpacity
-        style={styles.tile}
+        style={styles.button}
         onPress={() => navigation.navigate("UploadPestImage")}
       >
-        <Image
-          source={require("../../assets/scan-pest.gif")}
-          style={styles.tileImage}
+        <Icon
+          name="bug-check-outline"
+          size={24}
+          color="#fff"
+          style={styles.buttonIcon}
         />
-        <Text style={styles.tileText}>Detect Pests</Text>
+        <Text style={styles.buttonText}>Detect Pests</Text>
       </TouchableOpacity>
 
+      {/* View History Button */}
       <TouchableOpacity
-        style={[styles.tile, { marginBottom: 0 }]} // Remove extra space at bottom
+        style={styles.button}
         onPress={() => navigation.navigate("PestHistory")}
       >
-        <Image
-          source={require("../../assets/pest-history.gif")}
-          style={styles.tileImage}
+        <Icon
+          name="history"
+          size={24}
+          color="#fff"
+          style={styles.buttonIcon}
         />
-        <Text style={styles.tileText}>View History</Text>
+        <Text style={styles.buttonText}>View History</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    justifyContent: "center",
+    alignItems: "center",
     paddingHorizontal: 20,
-    alignItems: "center",
-    justifyContent: "center", // Center vertically
+    backgroundColor: "#ffffff",
   },
-  headerText: {
-    fontSize: 24,
+  title: {
+    fontSize: 28,
     fontWeight: "bold",
-    color: "#40B59F",
+    marginBottom: 8,
+    color: "#00796b",
+    fontFamily: "Poppins",
+    textAlign: "center",
+  },
+  subtitle: {
+    fontSize: 16,
+    color: "#555",
     marginBottom: 30,
+    fontFamily: "Poppins",
+    textAlign: "center",
   },
-  tile: {
-    backgroundColor: "#E8F6F3",
-    borderRadius: 12,
-    paddingVertical: 20,
-    paddingHorizontal: 15,
+  button: {
+    flexDirection: "row",
+    backgroundColor: "#40B59F",
+    paddingVertical: 14,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    marginTop: 20,
+    width: "80%",
     alignItems: "center",
-    width: screenWidth * 0.85,
-    marginBottom: 20,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 8,
-    elevation: 3,
+    justifyContent: "center",
+    elevation: 5,
   },
-  tileImage: {
-    width: 80,
-    height: 80,
-    marginBottom: 10,
-    resizeMode: "contain",
-  },
-  tileText: {
+  buttonText: {
+    color: "#fff",
     fontSize: 18,
     fontWeight: "600",
-    color: "#333",
+    marginLeft: 10,
+    fontFamily: "Poppins",
+  },
+  buttonIcon: {
+    marginRight: 10,
   },
 });
